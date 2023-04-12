@@ -1,9 +1,37 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import "./App.css";
 import Joke from "./Joke";
 import JokeForm from "./JokeForm";
+
+function jokesReducer(jokes, action) {
+  switch (action.type) {
+    case "added_joke":
+      return [action.joke, ...jokes];
+    case "deleted_joke":
+      return jokes.filter((joke) => joke.id != action.id);
+    case "liked_joke":
+      return jokes.map((joke) => {
+        if (joke.id === action.id) {
+          return { ...joke, likes: joke.likes + 1 };
+        } else {
+          return joke;
+        }
+      });
+    case "disliked_joke":
+      return jokes.map((joke) => {
+        if (joke.id === action.id) {
+          return { ...joke, likes: joke.likes - 1 };
+        } else {
+          return joke;
+        }
+      });
+    case "sorted_joke":
+      return [...jokes].sort((a, b) => b.likes - a.likes);
+  }
+}
+
 function App() {
-  const [jokes, setJokes] = useState([
+  const [jokes, dispatch] = useReducer(jokesReducer, [
     {
       id: 1,
       text: "I'm afraid for the calender, It's days are numbered.",
@@ -23,38 +51,20 @@ function App() {
       likes: 0,
     };
     if (text != "") {
-      setJokes([joke, ...jokes]);
+      dispatch({ type: "added_joke" });
     }
-    console.log(`Joke: ${text}`);
   };
   const handleDeleteJoke = (id) => {
-    setJokes(jokes.filter((joke) => joke.id != id));
-    console.log("Joke id:", id);
+    dispatch({ type: "deleted_joke", id });
   };
   const handleLike = (id) => {
-    setJokes(
-      jokes.map((joke) => {
-        if (joke.id === id) {
-          return { ...joke, likes: joke.likes + 1 };
-        } else {
-          return joke;
-        }
-      })
-    );
+    dispatch({ type: "liked_joke", id });
   };
   const handleDislike = (id) => {
-    setJokes(
-      jokes.map((joke) => {
-        if (joke.id === id) {
-          return { ...joke, likes: joke.likes - 1 };
-        } else {
-          return joke;
-        }
-      })
-    );
+    dispatch({ type: "disliked_joke", id });
   };
   const handleSort = () => {
-    setJokes([...jokes].sort((a, b) => b.likes - a.likes));
+    dispatch({ type: "sorted_joke" });
   };
   return (
     <div className="App">
