@@ -4,7 +4,15 @@
   padding: 2rem;
   text-align: center;
 }
-
+input {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+button {
+  margin: 0 5px;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

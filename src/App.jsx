@@ -51,7 +51,7 @@ function App() {
       likes: 0,
     };
     if (text != "") {
-      dispatch({ type: "added_joke" });
+      dispatch({ type: "added_joke", joke });
     }
   };
   const handleDeleteJoke = (id) => {
