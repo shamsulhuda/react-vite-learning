@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 
-export default function Timer() {
+export default function Timer({ interval }) {
   const [time, setTime] = useState(0);
   useEffect(() => {
     console.log("useEffect called!");
-    const interval = setInterval(() => {
+    const i = setInterval(() => {
       setTime((t) => t + 1);
-    }, 1000);
+    }, interval);
     return () => {
-      clearInterval(interval);
+      clearInterval(i);
     };
-  }, []);
+  }, [interval]);
 
   return (
     <div>
-      <h2>Timer</h2>
+      <h2>Timer ({interval})</h2>
       <p>{time}</p>
     </div>
   );
